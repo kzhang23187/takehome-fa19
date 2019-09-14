@@ -45,11 +45,19 @@ def create_response(
 def hello_world():
     return create_response({"content": "hello world!"})
 
-@app.route("/contacts/<id>", methods=['GET'])
+@app.route("/contacts/<id>", methods=['GET','PUT'])
 def get_contacts_id(id):
     if db.getById('contacts', int(id)) is None:
         return create_response(status=404, message="No contact with this id exists")
-    return create_response(db.getById('contacts', int(id)))
+    if request.method == 'GET':
+        return create_response(db.getById('contacts', int(id)))
+    if request.method == 'PUT':
+        body = request.json
+        valid = ['name', 'hobby']
+        update = { key: body[key] for key in valid }
+        print(update)
+        return create_response(db.updateById('contacts', int(id), update))
+
 
 @app.route("/mirror/<name>")
 def mirror(name):
@@ -65,7 +73,6 @@ def get_all_contacts():
         return create_response({"contacts": db.getByHobby('contacts', hobby)})
     if request.method == 'POST':
         body = request.json
-        print(body)
         return create_response(db.create('contacts', body))
 
 

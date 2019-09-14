@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
 
-class App extends Component {
+class Contact extends Component {
   // YOUR CODE GOES BELOW
-  
+  constructor(props) {
+    super(props)
+  }
   render() {
     return (
-      <div/> 
+      <div className="Contact">
+          Name: {this.props.name}
+      </div>
     )
   }
 }
 
-export default App
+export default Contact
