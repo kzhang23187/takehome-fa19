@@ -68,6 +68,8 @@ def mirror(name):
 def get_all_contacts():
     if request.method == 'GET':
         hobby = request.args.get('hobby')
+        if (hobby is None):
+            return create_response({"contacts": db.get('contacts')})
         if db.getByHobby('contacts', hobby) is None:
             return create_response(status=404, message="No contact with this hobby exists")
         return create_response({"contacts": db.getByHobby('contacts', hobby)})
@@ -76,7 +78,7 @@ def get_all_contacts():
         return create_response(db.create('contacts', body))
 
 
-@app.route("/shows/<id>", methods=['DELETE'])
+@app.route("/contacts/<id>", methods=['DELETE'])
 def delete_show(id):
     if db.getById('contacts', int(id)) is None:
         return create_response(status=404, message="No contact with this id exists")
